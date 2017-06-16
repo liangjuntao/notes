@@ -118,6 +118,101 @@ c:_1="tom"/>
 - 自定义的限定符，在bean声明上添加`@Qualifier`
  *详细使用章节3.3.2，先不细看。*
 
+# 第四章 面向切面编程 #  
+典型的安全，事务，管理是每个模块都需要的功能。这就是一个横切面。  
+
+**术语**
+- 通知 advice
+什么时候执行？
+ 1. 前置：目标方法被调用前
+ 2. 后置：目标方法完成之后调用，不关心输出
+ 3. 返回：目标方法成功执行之后
+ 4. 异常：目标方法有异常时
+ 5. 环绕：在通知方法调用之前好之后执行自定义的行为 
+
+- 连接点 join point
+连接点是在应用执行过程中能够插入切面的一个点。  
+这个点可以试调用方法时，抛出异常时，甚至是修改一个字段时。  
+切面代码利用这个点插入到应用的正常流程中，添加新功能。  
+
+- 切点 pointCut
+新功能切入到哪里？
+
+- 切面 aspect
+切入的是什么功能
+
+- 引入 introduction
+- 织入 weaving
+织入是把切面应用到目标对象并创建新的代理对象的过程。  
+切面在指定的连接点被织入到目标对象中。  
+在目标的声明周期中有多个点可以进行切入：
+ 1. 编译期
+ 2. 类加载期
+ 3. 运行期   
+
+切点是连接点的子集。？ 
+
+spring Aop构建在动态代理基础上。因为Spring运行时才创建代理对象， 所
+以我们不需要特殊的编译器来织入Spring AOP的切面。
+- spring只支持方法级别的连接点  
+因为Spring基于动态代理， 所以Spring只支持方法连接点。  
+例如AspectJ和JBoss， 除了方法切点， 它们还提供了字段和构造器接入点。 Spring缺少对字段连接点的支持， 无法
+让我们创建细粒度的通知， 例如拦截对象字段的修改。 而且它不支持构造器连接点， 我们就无法在bean创建时应用通知。
+
+# 第五章 构建spring web应用程序 #
+模型:其实指的是数据原信息，而且仅仅是数据，不是经过html，xml包装过的表示。 
+视图：返回给用户原始信息时不合理的，需要对用户友好的方式格式化，一般是html，所以信息要发送给一个view。
+
+
+modelAndView：这个是控制器处理完请求之后，产生的数据和视图名。   
+modelAndView返回个前段控制器之后，会基于视图名去找真正的视图。即此阿勇viewResolver来讲逻辑视图匹配为一个特定的视图实现。视图将用模型数据渲染输出，这个输出会通过响应传给客户端
+
+
+## 搭建spring Mvc ##
+- AbstractAnnotationConfigDispatcherServletInitializer剖析
+ 1. servlet3.0环境中，容器会在类路径中查找`javax.servlet.ServletContainerInitializer`接口的类，如果有的话，就用它来配置Servlet容器。
+ 2. spring提供了这个接口的实现SpringServletcontainerInitializeer,其中有协助这个实现的类去完成配置的任务，这个类是WebApplicationInitializer,也就是AbstractAnnotationConfigDispatcherServletInitializer，从而我们自己写的类继承AbstractAnnotationConfigDispatcherServletInitializer，容器就会拿这个子类来配置Servlet上下文。
+- 其中我们自己定义的类，要实现三个方法
+ 1. `getServletMappings()`,这个方法将一个或多个路径映射到DipatcherServlet。”/“，就是默认的servlet。所有的请求都会给它来处理。
+ 2. `getRootconfClasses()`,此方法带有`@Configuration`注解的类，将会来配置ContextLoaderListener创建的应用上下文中的bean；
+ 3. `GetServletConfigClasses()`方法返回的带有`@Configuration`注解的
+类将会用来定义DispatcherServlet应用上下文中的bean
+
+- 说明：不采用web.xml配置，使用java将DispatcherServlet配置在Servlet容器中。  
+ 1. 以前是采用`<mvc:annotation-driven>`，现在采用`@EnableWebMvc`修饰一个配置类。
+ 2. 不配置视图解析器。spring默认采用BeanNameView-Resolver,根据beanId与视图名称匹配的bean，并且要实现view接口，以这样的方式解析视图。  
+ 3. 没有启用组件扫描。spring只能显示声明在配置类中的控制器。
+ 4. 默认会处理所有的请求，包括对静态资源的请求
+
+- 几种常用的视图解析器
+ 1. InterResourceViewResolver，将视图解析为Web应用的内部资源（一般为JSP）
+ 2. ContentNegotiatingViewResolver，通过考虑客户端需要的内容类型来解析视图， 委托给另外一个能够产生对应内容类型的视图解析器
+ 3. JstlView，可以解析jstl格式化标签。
+- 具体的步骤
+ 1. `@EnableWebMvc`, 开启springmvc组件
+ 2. `@ComponentScan`, 开启组件扫描
+ 3. `InterResourceViewResolver`,配置jsp视图解析器
+ 4. `DefaultServletHandlerConfigurer`，配置对静态资源的处理  
+
+- 异常处理
+	1. @ResponseStatus，将异常映射转换为http中特定的状态码
+	2. @ExceptionHandler，可以处理某个类抛出来的所有异常
+
+- 重定向中的数据如何实现跨请求
+	1. 对于重定向来说， 模型并不能用来传递数据。 但是我们也有一些其他方案， 能够从发起重定向的方法传递数据给处理重定向方法。（使用URL模板以路径变量和/或查询参数的形式传递数据）
+	2. 除了连接String的方式来构建重定向URL， Spring还提供了使用模板的方式来定义重定向URL。比如：` return "redirect:/spitter/{username}" ;`
+	3. 通过flash属性发送数据。RedirectAttributes提供了一组addFlashAttribute()方法来添加flash属性。
+
+
+
+
+# 第八章 spring web flow #
+有时候， Web应用程序需要控制网络冲浪者的方向， 引导他们一步步地访问应用。 比较典型的例子就是电子商务站点的结账流程， 从购物车开
+始， 应用程序会引导你依次经过派送详情、 账单信息以及最终的订单确认流程。
+跳过，没需求。
+
+# 第九章 Spring Security #
+
 
 
 # 第11章 使用对象-关系映射持久化数据 #
