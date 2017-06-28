@@ -1,0 +1,55 @@
+1。进入login页面
+	第一次登录，不携带cookie，session等任何信息。
+	服务器会返回set-Cookie串
+2.账号，密码点击登录
+	携带cookie，标识一次会话，而不是登录上了，才发这个值
+3.访问checkLogin方法
+	1.参数检查
+	2.创建token（用户输入的：用户名，密码）
+		其中会把密码字符串转化为字符数组
+	3.获取当前主题subject
+		调用Security.getSubject()获取
+		通过ThreadContext.getSubject()获取subject
+		如果返回的subject为空，那就创建一个subject，并且绑定到当前线程上下文中。
+	4.subject.login登录，一般会try catch下获取这个认证失败信息
+		1.clearRunAsIdentitiesInternal(); 
+		  明确运行身份，会检查一次seesion。
+		  如果session为空，并且boolean 可创建session是true，会创建Seesion上下文。
+		  通过sessionManager创建session，并且会这个session进行装饰，？什么鬼
+		  之后会移除session中的key-org.apache.shiro.subject.support.DelegatingSubject.RUN_AS_PRINCIPALS_SESSION_KEY
+		  通过httpSession移除
+		2.SecurityManager.login（）
+		  AuthenticationInfo authenticate(token) 进行认证操作，获取authenticator进行认证
+		  AuthenticatingSecurityManager
+		  即通过安全管理器中，找到认证器，认证器中有doAuthenticate进行认证操作
+		  ->assertRealmsConfigured
+				1.Collection realms = getRealms();
+				2.doSingleRealmAuthentication，在这个方法中，我们会把自己定义的realm和token传进来，
+				  在这个中间会调用缓存getCachedAuthenticationInfo，会拿到缓存认证信息。
+				  如果缓存认证信息会空，那么会调用doGetAuthenticationInfo（token）去获取认证信息
+				3.<这里就到了我们自己实现的realm中了，realm其实做的就是比对用户信息，判断是否通过认证>
+				4.protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken arg0){..}
+					1.获取token，从token中获取用户名。其实token就是用户名和密码的组合（其中的一种类型）
+					2.通过用户名作参数去查询数据库，获取用户信息。
+					3.创建这个SimpleAuthenticationInfo（用户名，密码，real_name）？？做用是什么，这几个参数是从数据库根据用户名查找到的
+					4.返回info
+					5.这个时候拿着这个info，assertCredentialsMatch，获取凭证匹配器去匹配
+						doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info)
+						会拿着token和info，进行比对。
+						失败就会抛出异常，正常就返回
+					3.根据特别的用户需求，比如用户是否锁定等；进行用户信息的判断，进行业务定制开发。
+					注：自己业务实现shiro session的添加
+						1.SecurityUtils.getSubject()获取当前的subject
+						2.获取session，org.apache.shiro.subject.support.DelegatingSubject$StoppingAwareProxiedSession
+						3.httpSession设置session的值
+		3.判断login是否认证成功
+			成功：
+				1.获取session
+				2.session中添加用户的菜单信息，即权限树
+				3.返回index
+			失败：记录日志
+4.index方法中
+	1.获取subject.getSession().getAttribute("currentUser");当前用户
+	2.设置用户信息
+-------------------------
+整个认证流程走了一遍；
