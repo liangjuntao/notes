@@ -1,0 +1,73 @@
+4个私有常量：
+===========================================
+SqlSessionFacatory: 
+ExecutorType
+SqlSession
+PersistenceExceptionTranslator
+
+
+SqlSessionFacatory：
+------------------------
+接口。
+接口中只有一个方法的各种重载:openSeesion.
+openSeesion返回了一个SqlSeesion的实现类对象。
+作用是返回一个SqlSession的实现类。
+注：
+SqlSessionFactory有两个子类：
+	1.DefaultSqlSessionFactory
+	2.SqlSessionManager
+
+	
+ExecutorType   mybatsi特有
+---------------------------
+是一个枚举类。
+封装了三个类型：
+SIMPLE ：为每个语句创建一个PreparedStatement
+REUSE ： 重复使用PreparedStatements。
+BATCH ：批量更新，且必要地区别开其中的select 语句，确保动作易于理解。
+
+	
+SqlSession  mybatis特有
+-------------------------
+接口。
+SqlSeesion中的方法是增删改查的语句，和所需要的参数。
+如:selectOne ,selectList，selectMap，insert，update，delete，commit，rollback，close
+包括回滚操作	
+SqlSession的三种实现类：
+	1.defaultSqlSession ibatis
+	2.SqlSessionManager ibatis
+	3.SqlSessionTemple spring-ibatis
+
+	
+PersistenceExceptionTranslator	 spring才有的
+---------------------------------
+接口。
+作用：主要是做异常处理的。
+两个实现类：
+1.ChainedPersistenceExceptionTranslator
+2.MyBatisExceptionTranslator
+
+
+构造器
+============================================
+共有三个参数：
+SqlSessionFactory , ExecutorType, PersistenceExceptionTranslator)
+1.默认执行器类型是simple
+2.异常处理默认：MyBatisExceptionTranslator
+最后初始化了SqlSession私有变量，jdk动态代理生成一个sqlSession的代理对象。
+
+
+
+在具体执行的时候,如selectList操作时候：
+1.会将statement如：“dm.getName”进行封装，会将sql语句封装为MappedStatement对象；
+（是否返回自增主键id，sql在哪个xml中，sql类型-增删改查，执行器类型，查询条件字段名字，sql语句的类型-PREPARED）
+其中sql语句会
+2.执行器执行query方法（）
+	1.再进行一次封装BoundSql
+	2.CacheKey-继续处理sql语句，持续赋值
+		（获取dm.getNameByid，跟分页有关的参数，sql语句，参数，ParameterMode-Mode，查询参数赋值）
+		 调用doquery()
+		 获取连接
+		 通过executor.statement.StatementHandler几种实现类加载参数
+		 最后执行query操作
+//明天继续搞
