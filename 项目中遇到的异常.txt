@@ -1,0 +1,4 @@
+1。Error configuring application listener of class org.springframework.web.context.ContextLoaderListener 
+
+解决方案：
+其实可能是你的jar文件没有同步发布到自己项目的lib目录中(如果你是用Maven进行构建的话) 可以试试 下面的办法 项目点击右键 点击 Properties 选择Deployment Assembly 再点击右边的Add按钮 选择Java Build Path Entries后点击Next按钮 然后选择你的Maven Dependencies 确定即可
