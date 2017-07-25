@@ -1,4 +1,21 @@
-1。Error configuring application listener of class org.springframework.web.context.ContextLoaderListener 
+1.Error configuring application listener of class org.springframework.web.context.ContextLoaderListener 
 
-解决方案：
+解决方案：（亲测，可行）
 其实可能是你的jar文件没有同步发布到自己项目的lib目录中(如果你是用Maven进行构建的话) 可以试试 下面的办法 项目点击右键 点击 Properties 选择Deployment Assembly 再点击右边的Add按钮 选择Java Build Path Entries后点击Next按钮 然后选择你的Maven Dependencies 确定即可
+
+
+2.Unable to process Jar entry [javassist/util/proxy/SecurityActions.class] from Jar [jar:file:***javassist-3.20.0-GA.jar!/] for annotations
+maven项目-解决方案：（亲测，可行）
+这个问题是本地 maven 仓库中，jar 包下载不完全，或者jar 包缺失导致的，把 jar 包对应的文件夹删除掉，然后重新下载载即可。
+
+非maven项目-解决方案：
+更新tomcat版本，我之前从8.0.8,换为8.0.39，这个问题解决了。
+
+
+3.The web application [/zxzh-api] registered the JDBC driver [com.alibaba.druid.proxy.DruidDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+解决方案：
+更新tomcat版本，我之前从8.0.8,换为8.0.39，这个问题莫名其妙的好了。
+按照网上的kill掉tomcat，不起作用。
+
+
+
