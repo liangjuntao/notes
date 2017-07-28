@@ -19,3 +19,9 @@ maven项目-解决方案：（亲测，可行）
 
 
 
+4.tomcat目录映射的问题
+解决方案：
+采用的是eclipse的server，修改Servers/Tomcat v8.0 Server at localhost-conf /server.xml，
+在<HOST></HOST>标签中，添加
+<Context docBase="c://upload" path="upload" debug="0" reloadable="true"/>
+注意是添加，不要去修改之前<Context>。
