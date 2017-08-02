@@ -27,3 +27,11 @@ maven项目-解决方案：（亲测，可行）
 注意是添加，不要去修改之前<Context>。
 
 
+
+5.java.lang.IllegalArgumentException: No converter found for return value of type: class system.pojo.ResponseResult
+这个是需要加入json的转换。
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+           	    <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"/>
+   		</mvc:message-converters>
+	</mvc:annotation-driven>
