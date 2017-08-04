@@ -1,0 +1,12 @@
+创建一个对象
+	ClassLoader-->首先类加载器去加载二进制class文件
+	
+代理类的newProxyInstance方法
+	判断调用处理类参数是否为空
+	接口克隆
+	一大堆 就new出来了。。。
+	
+method.invoke
+	native方法，估计是根据加载的class文件，去动态的访问了那个代理的接口中的方法；
+	
+	

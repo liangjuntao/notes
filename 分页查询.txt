@@ -1,0 +1,26 @@
+﻿mybatis中的分页查询
+----------------
+物理分页  
+mybatis先获取offset,limit，在sql查询时只查询我们要的数据集，返回。
+
+
+逻辑分页  
+mybatis访问数据库先拿到整个数据集，然后根据offset,limit，返回要查找的数据。  
+是通过RowBounds实现的。
+
+源码：
+  public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
+      ResultHandler resultHandler, BoundSql boundSql) {
+    ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+    resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+    return resultSetHandler;
+  }
+
+  public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+    StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+    statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+    return statementHandler;
+  }
+
+一个是查询操作，一个是结果集处理操作。
+其中都支持拦截器对器进行操作。
