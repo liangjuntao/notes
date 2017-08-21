@@ -52,8 +52,32 @@ Selector:选择器，多路复用器
 而是客户端将SocketChannel注册到服务器端的Selector中，Selctor（单线程死循环）去轮训通道，检测通道的状态，执行相关的操作。  
 **SocketChannel的状态**：connet,accept,read,write。
   
-Buffer：      
+**Buffer：**        
 面向流的io中，可以将数据直接写入或读取到Stream对象中；在nio中，所有的数据都是用缓冲区处理的读写。  
 缓冲区实质上是一个数组。  
 flip() 将pos置为0；同时limit变为当前buff中存在的数据长度；
-该看4
+
+
+**Channel **  
+网络数据通过Channel读取和写入，通道和流的不同之处在于通道是双向的。  
+客户端：SocketChannel  
+服务器：ServerSocketChannel
+    
+channel.read(bufferArray)：
+反过来念buffer通过channel读取数据，也就是写入到buffer
+read()方法按照buffer在数组中的顺序将从channel中读取的数据写入到buffer
+
+channel.write(buffer);
+反过来念，从buffer中取数据，写出到channel中。  
+
+
+**Selector **  
+核心：选择已经就绪任务的能力，选择判断注册到Secletor上通道的状态，从而进行读写。    
+Selector不断轮询注册在其上的通道。 
+如果某个通道发生读写操作，这个通道就处于就绪状态，会被Selector轮询出来。  
+然后通过SelectKey取得就绪的Channel集合，从而继续IO操作。  
+
+客户端通过key注册到Selector上。
+要点：selector可以成千上万个Channel通道注册，没有上限；  
+使用epoll代替的了传统的select实现；（epoll是linux上的技术），获取无限客户端。  
+意味着只要一个线程负责Selector的轮询，就可以接入无限的客户端。
