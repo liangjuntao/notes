@@ -35,3 +35,9 @@ maven项目-解决方案：（亲测，可行）
            	    <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"/>
    		</mvc:message-converters>
 	</mvc:annotation-driven>
+
+
+
+6.Error creating bean with name 'org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping': Initialization of bean failed;
+查了stackoverfolw 这个是bug，建议换spring版本，换过之后解决了。
+bug；spring4.2.5-->spring4.3.5
