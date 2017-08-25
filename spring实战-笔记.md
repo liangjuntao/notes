@@ -61,6 +61,21 @@
 - 自动装配
  1. `@Autowired`，构造器、 Setter方法还是其他的方法（其他方法也是可以的，只要是作为一个参数传入，都可以使用这个注解）
  2. `@Autowired(required=false)`，当required属性设置为false时，spring会尝试自动装配，但如果没有匹配的bean时，spring会让这个bean处于未装配的状态。  
+
+##@Autowiredh 和 @Resource区别：  
+
+**@Autowire**  
+默认按照类型装配。  
+默认情况下它要求依赖对象必须存在如果允许为null，可以设置它required属性为false，如果我们想使用按照名称装配，可 以结合@Qualifier注解一起使用;  
+
+**@Resource**  
+@Resource默认按照名称装配。  
+当找不到与名称匹配的bean才会按照类型装配，可以通过name属性指定，如果没有指定name属 性，当注解标注在字段上，即默认取字段的名称作为bean名称寻找依赖对象，当注解标注在属性的setter方法上，即默认取属性名作为bean名称寻找 依赖对象。  
+注意：  
+如果没有指定name属性，并且按照默认的名称仍然找不到依赖的对象时候，会回退到按照类型装配，但一旦指定了name属性，就只能按照名称 装配了。  
+
+
+
 ## 通过java代码装配bean ##
 - 创建JavaConfig类</br>关键在于为其添加`@Configuration`注解， `@Configuration`注解表明这个类是一个配置类， 该类应该包含在Spring应用上下文中如何创建bean的细节。
 - 声明简单的bean</br>默认情况下，bean id与带有@Bean注解的方法名是一样的可以通过`@Bean(name="")`，来指定一个名字。
