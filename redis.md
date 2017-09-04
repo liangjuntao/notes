@@ -187,9 +187,17 @@ discard 取消回滚
 一致性hash。  
 简单的就是海量数据快速定位数据在哪个槽/库。  
 redis实现：   
+
     select * from tb_user where id = 3;
 
 
 ###架构设计  
 技术 + 设计  
 
+
+###keep alive  
+
+###集群搭建 
+略  
+
+###
