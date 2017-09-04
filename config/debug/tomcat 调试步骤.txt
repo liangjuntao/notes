@@ -1,0 +1,23 @@
+﻿tomcat中
+startup.bat 调用的是 catalina.bat start 启动tomcat服务器的。
+shutdown.bat 调用的是 catalina.bat stop 关闭tomcat服务器的。
+
+目标：
+采用自己的jdpa.bat来直接启动远程调试。
+
+步骤：
+1.复制start.bat，重命名为jdpa.bat
+2.搜索 call "%EXECUTABLE%" start %CMD_LINE_ARGS%
+修改为一下四行
+set JPDA_TRANSPORT=dt_socket
+set JPDA_ADDRESS=8000
+set JPDA_SUSPEND=y
+call "%EXECUTABLE%" jpda start %CMD_LINE_ARGS%
+3.执行jpda.bat
+（完）
+
+
+排查原因：
+如果远程服务器已经进入调试模式，本地缺不能连接。
+1.window-->preferences-->搜索network Connections，修改Active Provider为Direct,重启eclipse。
+2.window-->preferences-->搜索Debug,修改Debugger timeout 为6000，延时时间久一点。
