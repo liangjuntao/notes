@@ -63,7 +63,6 @@ thread 实现了runable 接口
 
 ## 线程池基础 ##
 ### Executor接口 ###
-接口定义：
 
 	public interface Executor {
 	    void execute(Runnable command);
@@ -84,8 +83,37 @@ thread 实现了runable 接口
 	public interface Future<V> {
 		//作业是否完成
 		boolean isDone();
-		
+		//获取返回值
+		V get() throws InterruptedException, ExecutionException;
+		//等待最大时间，超过抛异常
+		get(long timeout,TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
 	}
+
+### RunnableFuture接口 ###
+	
+	public interface RunnableFuture<V> extends Runnable, Future<V> {
+    	void run();
+	}
+
+可以看出RunnableFuture继承了Runable,Future接口；
+
+
+### FutureTask类 ###
+	
+	public class FutureTask<V> implements RunnableFuture<V> {
+		//...
+	}	
+
+唯一实现Future的接口的类；
+
+### Callable接口 ###
+
+	public interface Callable<V> {
+    	V call() throws Exception;
+	}
+	
+1. 结合线程池和Future使用，线程池提交任务，调用call()的方法  
+2. 结合Callable+FutureTask，new Thread(task),去执行
 
 
 ## 线程池提交作业的几种方式及区别 ##
