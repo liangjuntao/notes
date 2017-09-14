@@ -1,7 +1,7 @@
 ## 基础 ##
 线程拥有自己的内存空间，即是java内存模型中的java虚拟机栈  （这个是线程私有的，别的都是共有的）
 ## jvm内存模型 ##
-堆 栈（本地栈，java虚拟机栈） 方法区 运行时常量池 程序计数器 直接内存
+堆 栈（本地栈，java虚拟机栈） 方法区 运行时常量池 程序计数器 直接内存(nio操作区域)
 
 ## Thread类 ##
 **start方法**  
@@ -61,22 +61,7 @@ thread 实现了runable 接口
 - 运行Callable任务可以拿到一个Future对象，表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并检索计算的结果。通过Future对象可以了解任务执行情况，可取消任务的执行，还可获取执行结果。
 - 加入线程池运行，Runnable使用ExecutorService的execute方法，Callable使用submit方法。
 
-## 线程池基础 ##
-### Executor接口 ###
-
-	public interface Executor {
-	    void execute(Runnable command);
-	}
-
-
-### ExecutorService接口 ###
-
-	public interface ExecutorService extends Executor {
-		void shutdown();
-		//这里返回的是Future的实现类对象，可以获取执行的状态等
-		Future<?> submit(Runnable task); 
-	}
-
+## 线程基础 ##
 
 ### Future接口  ###
 
@@ -116,5 +101,99 @@ thread 实现了runable 接口
 2. 结合Callable+FutureTask，new Thread(task),去执行
 
 
+## 创建线程的四种方式 ##
+### 1.继承Thread类 和 2.实现Runnable接口###
+
+	public class Thread1 {
+		public static void main(String[] args) {
+			// 匿名内部类
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					System.out.println("abc");
+				}
+			}).start();
+			// java8 lamda
+			new Thread(() -> System.out.println("In Java8!")).start();
+			// 继承Thread
+			new Thread(new Audio()).start();
+			// 实现runnable
+			new Thread(new Video()).start();
+		}
+	
+		static class Audio extends Thread {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				System.out.println("audio");
+			}
+		}
+	
+		static class Video implements Runnable {
+			@Override
+			public void run() {
+				System.out.println("video");
+			}
+		}
+	}
+
+
+### 3.实现Callable接口，采用创建Thread去执行任务，FutureTask获取结果 ###
+
+	public class Audio implements Callable {
+		@Override
+		public Object call() throws Exception {
+			return "abc";
+		}
+	}
+
+	FutureTask futureTask = new FutureTask(new Audio());
+	new Thread(futureTask).start();
+	System.out.println(futureTask.get());
+
+
+### 4.实现Callable接口，采用ExecutorService线程池提交任务，Future获取执行结果 ###
+
+	public class Audio implements Callable {
+		@Override
+		public Object call() throws Exception {
+			return "abc";
+		}
+	}
+
+	ExecutorService threadPool = Executors.newCachedThreadPool();
+	Future<Object> future = threadPool.submit(Audio());	
+	
+
+## 线程池基础 ##
+### Executor接口 ###
+
+	public interface Executor {
+	    void execute(Runnable command);
+	}
+
+只有这一个方法，执行。
+
+### ExecutorService接口 ###
+
+	public interface ExecutorService extends Executor {
+		void shutdown();
+		boolean isShutdown();
+		boolean isTerminated();
+		//执行任务集合，返回Future集合
+		<T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException;		
+		//这里返回的是Future的实现类对象，可以获取执行的状态等
+		Future<?> submit(Runnable task); 
+		//有返回结果
+		<T> Future<T> submit(Callable<T> task);
+		//有返回结果
+		Future<?> submit(Runnable task);
+	}
+从这里可以看出，提交作业可以execute()或者submit()。
+
+
 ## 线程池提交作业的几种方式及区别 ##
 
+### 采用Executors框架提供的静态方法 ###
+四种。
+### 自定义线程池 ###
