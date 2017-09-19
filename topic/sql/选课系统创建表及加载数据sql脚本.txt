@@ -1,0 +1,108 @@
+-- --------------------------------------------------------
+-- 主机:                           127.0.0.1
+-- 服务器版本:                        5.6.28-log - MySQL Community Server (GPL)
+-- 服务器操作系统:                      Win64
+-- HeidiSQL 版本:                  9.3.0.4984
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- 导出 test1 的数据库结构
+DROP DATABASE IF EXISTS `test1`;
+CREATE DATABASE IF NOT EXISTS `test1` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `test1`;
+
+
+-- 导出  表 test1.course 结构
+DROP TABLE IF EXISTS `course`;
+CREATE TABLE IF NOT EXISTS `course` (
+  `no` varchar(50) DEFAULT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `hours` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 正在导出表  test1.course 的数据：~6 rows (大约)
+DELETE FROM `course`;
+/*!40000 ALTER TABLE `course` DISABLE KEYS */;
+INSERT INTO `course` (`no`, `name`, `hours`) VALUES
+	('c01', '计算机导论', 70),
+	('c02', 'vc++', 90),
+	('c03', '计算机网络', 80),
+	('c04', '数据库基础', 105),
+	('c05', '高等数学', 180),
+	('c06', '数据结构', 72);
+/*!40000 ALTER TABLE `course` ENABLE KEYS */;
+
+
+-- 导出  表 test1.sc 结构
+DROP TABLE IF EXISTS `sc`;
+CREATE TABLE IF NOT EXISTS `sc` (
+  `student_no` int(11) DEFAULT NULL,
+  `course_no` varchar(50) DEFAULT NULL,
+  `grade` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 正在导出表  test1.sc 的数据：~8 rows (大约)
+DELETE FROM `sc`;
+/*!40000 ALTER TABLE `sc` DISABLE KEYS */;
+INSERT INTO `sc` (`student_no`, `course_no`, `grade`) VALUES
+	(1612101, 'c01', 90),
+	(1612101, 'c02', 86),
+	(1612101, 'c05', 84),
+	(1612102, 'c01', 85),
+	(1612102, 'c03', 91),
+	(1612102, 'c06', 76),
+	(1612103, 'c04', 80),
+	(1612103, 'c03', 82);
+/*!40000 ALTER TABLE `sc` ENABLE KEYS */;
+
+
+-- 导出  表 test1.student 结构
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE IF NOT EXISTS `student` (
+  `no` int(11) unsigned zerofill NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `sex` varchar(50) DEFAULT NULL,
+  `age` int(11) DEFAULT NULL,
+  `dept` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 正在导出表  test1.student 的数据：~4 rows (大约)
+DELETE FROM `student`;
+/*!40000 ALTER TABLE `student` DISABLE KEYS */;
+INSERT INTO `student` (`no`, `name`, `sex`, `age`, `dept`) VALUES
+	(00001612101, '李勇', '男', 21, '数学系'),
+	(00001612102, '刘晨', '男', 23, '数学系'),
+	(00001612103, '王珊珊', '女', 21, '信息工程系'),
+	(00001612104, '张丽', '男', 20, '信息工程系');
+/*!40000 ALTER TABLE `student` ENABLE KEYS */;
+
+
+-- 导出  表 test1.tb_new 结构
+DROP TABLE IF EXISTS `tb_new`;
+CREATE TABLE IF NOT EXISTS `tb_new` (
+  `student_name` varchar(50) DEFAULT NULL,
+  `class_name` varchar(50) DEFAULT NULL,
+  `grade` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 正在导出表  test1.tb_new 的数据：~8 rows (大约)
+DELETE FROM `tb_new`;
+/*!40000 ALTER TABLE `tb_new` DISABLE KEYS */;
+INSERT INTO `tb_new` (`student_name`, `class_name`, `grade`) VALUES
+	('李勇', '计算机导论', 90),
+	('刘晨', '计算机导论', 85),
+	('李勇', 'vc++', 86),
+	('刘晨', '计算机网络', 91),
+	('王珊珊', '计算机网络', 82),
+	('王珊珊', '数据库基础', 80),
+	('李勇', '高等数学', 84),
+	('刘晨', '数据结构', 76);
+/*!40000 ALTER TABLE `tb_new` ENABLE KEYS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

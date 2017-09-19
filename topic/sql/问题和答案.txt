@@ -1,0 +1,56 @@
+##列出课程名，课程号，选修人数，最好成绩
+select 
+	t3.name,
+	t2.course_no,
+	count(t2.course_no),
+	max(t2.grade)
+from sc  t2
+left join student t1
+on t1.no = t2.student_no
+left join course t3
+on t2.course_no = t3.`no`
+group by t2.course_no
+
+
+
+##选课门数，递减排序
+select 
+	t1.name,
+	count(t2.student_no) as count
+from sc  t2
+left join student t1
+on t1.no = t2.student_no
+left join course t3
+on t2.course_no = t3.`no`
+group by t2.student_no
+order by count desc
+
+
+##选课门数超过两门
+select 
+	t1.name,
+	t1.`no`,
+	count(t2.student_no) as count,
+	avg(t2.grade)
+from sc  t2
+left join student t1
+on t1.no = t2.student_no
+left join course t3
+on t2.course_no = t3.`no`
+group by t2.student_no
+having count > 2
+
+
+##学生姓名，课程名称，考试成绩，保存到新表
+create table tb_new
+select 
+	t1.name as student_name,
+	t3.name as class_name ,
+	t2.grade
+from sc  t2
+left join student t1
+on t1.no = t2.student_no
+left join course t3
+on t2.course_no = t3.`no`
+
+
