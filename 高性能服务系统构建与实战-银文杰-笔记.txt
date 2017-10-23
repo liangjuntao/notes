@@ -1,0 +1,26 @@
+qps request per second  每秒请求数  
+tps transaction per secoond 每秒处理事物数
+tps transaction process sys 事物处理系统
+
+jvm -server模式
+	http://developer.51cto.com/art/201009/228035.htm
+	
+聚集索引和非聚集索引
+	http://www.cnblogs.com/julin-peng/p/4807843.html
+
+哈夫曼压缩算法
+
+keepalived
+	https://baike.baidu.com/item/Keepalived/10346758?fr=aladdin
+
+Tengine
+
+阻塞模型的改造：  
+tcp连接的建立 accept()
+数据读取 read()
+accept方法会一直阻塞，通过设置时间可以降低阻塞的时间，变相变为非阻塞；
+read方法也会一直阻塞，通过设置超时时间，变相变为非阻塞；
+通过设置超时，变相把阻塞模型改为了非阻塞，但是基于操作系统层面，性能并不好。
+即操作系统层面上的 同步I/O工作方式；
+
+分布式事务实现组件-tomcat/atomikos 
