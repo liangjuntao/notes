@@ -24,3 +24,15 @@ read方法也会一直阻塞，通过设置超时时间，变相变为非阻塞�
 即操作系统层面上的 同步I/O工作方式；
 
 分布式事务实现组件-tomcat/atomikos 
+
+行为模式--命令模式 
+
+hystrix和熔断 类似空气开关 将错误限制在一个可控范围
+spring cloud
+hystrix:
+download.csdn.net/detail/yinwenjie/9750136
+
+
+maven多模块项目构建 以及依赖
+gradle maven使用
+
