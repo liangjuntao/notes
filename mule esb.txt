@@ -1,0 +1,133 @@
+Mule Esb介绍
+表达式,消息结构
+
+saas平台:
+微博的开放平台,淘宝,腾讯的开放平台
+
+mule esb 图形化设计工具 ,支付宝也在用mule esb
+websphere esb 
+扩展比较好
+
+
+基本功能:
+服务接入
+消息转化
+消息路由
+消息过滤
+
+
+付款:
+余额宝,代金券,银行卡 
+一个请求,处理3个子流程
+
+
+
+
+restful式规范
+raml规范设计接口 业内推荐
+api designer
+
+xml流量多
+
+安全OAuth认证
+消息加密
+数字签名 防篡改
+
+
+其他产品:
+mmc :mule management console  企业版有
+(云)mule cloudHub mule提供的云服务,生成二级域名 ,通过互联网的方式供三方调用
+(云)api manager :对api的管理,权限认证等
+(云)api analytics :api的调用情况的分析
+
+
+
+第二章
+社区版/企业版
+社区办不支持高可用,集群模式不支持
+连接器,转换器不完全支持
+dataMapper不能用
+安全不能用
+不支持模板创建项目,升级包也没有
+缓存,事务 不支持
+
+
+./mule stop 
+./mule start
+
+
+第三章
+mel 和message结构
+1.熟悉mule语言 mel  mule exprssion lanuage
+转化的操作是放在message中了；
+payload对象：报文体，核心数据
+报文头辅助信息，编码规则
+connector,scoper,componet,transformer,filter,errorHandler,flowController
+raml ：rest式设计接口，一种对接口的描述。参数是什么？接收什么类型的请求类型？返回值是什么格式？
+muleesb开发工具导入raml的设计，产生flow；根据raml定义的描述产生不同的flow。通过apiKit router进行路由，进入不同的flow
+
+
+2.mule表达式
+#[表达式]
+例如：
+#[system.date] 取服务器的时间
+#[2+2 == 4] 判断2+2是否等于4
+
+3.
+anypoint：用eclipse实现的一个桌面开发环境。类似：idea内置了一个tomcat直接在ide中开发，本地调试就可以。 
+但是项目本身是要打包放到服务器上去的，这里就需要涉及到独立部署，standalone/集群部署。
+不管是standalone/集群都需要额外jar包；类似spark，可以独立部署和集群部署。
+不同的是独立部署的时候有一个apps目录，类似tomcat，可以将应用打包后放在这个目录下，通过服务器地址去访问，而不是用ide本地测试环境。
+
+
+4.
+mmc:企业版支持，web控制台。社区办不支持。
+
+
+
+5.
+message ：可以封装所有协议的数据。
+header：
+	inbound：
+	outboud：
+variable:
+	sessionVar:同一个esesson都可以使用，跨flow
+	flowVar:同一个flow可以用，不能跨flow
+	recordVar:batch中采用
+attachement:
+payload：业务数据都在payload中。
+
+
+6.muleEsb的四大对象
+server对象
+	#[server.date]
+mule对象
+	#[mule.version]
+app对象
+	#[app.name]
+message对象
+	#[message.payload]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
