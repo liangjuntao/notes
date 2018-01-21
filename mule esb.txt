@@ -108,7 +108,15 @@ app对象
 message对象
 	#[message.payload]
 
-
+第四章  
+1.社区办和企业版工具
+要安装运行时，help-->install soft
+	社区办runtime
+	企业版runtime
+	安装apikit工具  提供rest式的支持 raml设计rest接口
+	安装connnector（接口接入方式）
+	
+	
 
 
 
