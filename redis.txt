@@ -1,0 +1,70 @@
+1.2.2 内存存储与持久化
+提供持久化支持，异步写磁盘，不影响服务。
+
+1.2.3 功能丰富
+	1.作为缓存，队列系统使用。
+	2.设置ttl，生存时间到删除。
+	3.redis是单线程模型，memcached是多线程。
+	4.作为缓存，设置数据占用最大内存，超过内存限制，按规则删除key。
+	5.列表类型kv型可以实现队列，支持阻塞式读取。
+	6.支持发布订阅模式。
+
+2.1
+	1.稳定版--偶数版本
+
+2.2
+	1.make install 会将程序复制到/usr/local/bin目录。
+	2.redis默认端口6379
+		$redis-server --port 6380 自定义端口号启动
+	3.初始化脚本启动
+		3.1 $cp redis_init_script /etc/init.d
+			$mv redis_init_script redis_6380 -- 6380指的是redis监听端口号，也是客户端连接端口，修改脚本第六行为6380
+		3.2 $mkdir /etc/redis-server
+		    $mkdir /var/redis/6380
+		3.3 $cp conf_temple /etc/redis
+			$mv conf_temple 6380.conf
+	4.停止
+		$redis-cli shutdown  停止服务，且持久化到磁盘
+
+2.3.2 返回命令值
+	1.整数回复
+		>incr foo
+	2.字符串回复
+		>get foo
+	3.多行字符串回复
+		>keys *
+		keys命令作用是获取数据库中符合指定规则的键名。
+	
+2.4配置
+	1.redis支持通过配置文件来设置
+	$redis-server /path/to/redis.conf 将配置文件通过参数方式覆盖默认配置
+	>config set loglevel warning  在启动redis后动态设置配置，并不是所有配置都支持动态设置
+
+2.5多数据库
+	1.redis默认支持16个数据库，可通过配置参数database修改。
+	2.redis实例不支持自定义数据库名字，采用select 0/1/2/3 来切换数据库。
+	3.不支持每个数据库的设置密码，同一个操作可能会对所有数据库产生影响，非完全隔离。
+
+3.1热身
+	1.获取符合规则的键名列表
+		？ 一个字符
+		* 任意字符
+		[] 括号间任意字符
+		\x 匹配字符x，用于转义符号
+	2.设置一个键
+		>set bar 1
+	3.删除一个键
+		>del bar
+	4.判断一个键是否存在
+		>exists bar  返回1，存在；返回0，不存在。
+	5.获取键类型
+		>tpye bar
+	[linux:xargs 命令，用户输出作为输入参数传给下个命令 cat 1.txt | xargs ]
+
+
+	
+	
+	
+	
+	
+	
