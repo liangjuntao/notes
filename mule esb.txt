@@ -115,14 +115,20 @@ message对象
 	企业版runtime
 	安装apikit工具  提供rest式的支持 raml设计rest接口
 	安装connnector（接口接入方式）
+
 	
-	
+
+com/asiainfo/crm/report/dataextract/destination/business/dao/impl/RpPbossDetailDAOImpl.java:50
+
+com/asiainfo/center/order/server/msg/CancelRpGWInfoProcessImpl.java:104
 
 
 
 
 
-
+1.tf/task迁移，改造，并开始进行测试。
+2.消费者进程迁移，并开始测试。
+3.报表配置割接程序开发完，之后进行局部微调。
 
 
 
