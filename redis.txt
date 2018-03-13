@@ -61,8 +61,38 @@
 		>tpye bar
 	[linux:xargs 命令，用户输出作为输入参数传给下个命令 cat 1.txt | xargs ]
 
+3.2.2 命令
+	1.incr key 递增数字，原子操作。多个incr，不会出现线程不安全
+		利用事物和脚本实现
+3.2.3 实践
+	1.生成自增id
+		对象类型：count   存储当前类型的数量
+	2.文章访问量统计
+		user:1：fridends  对象类型：对象id：对象属性
+3.2.4
+	增加按步长
+		>incrby key increment 
+	减少
+		>decr key
+	减少按步长
+		>decrby key num
+	尾部追加值
+		>append key "world"
+	获取字符串长度
+		>strlen key
+	同时获取多个/设置多个键值
+		>mget key1 v1 key2 v2 key3 v3
+		>mset key1 v1 key2 v2 key3 v3
+3.3 散列
+	redis不支持数据类型嵌套。
+	散列适合存储对象：key field value
+	键名：对象类型：Id
+	属性：对象字段
+	属性值：字段值
 
-	
+3.4.1 列表是双向链表实现
+
+
 	
 	
 	
